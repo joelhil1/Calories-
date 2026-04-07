@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calories- Tracker</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: #f4f7f6; 
+            margin: 0; 
+            padding: 20px; 
+            color: #333; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        h2 { color: #2d3436; margin-top: 0; font-size: 1.5rem; text-align: center; }
+        .plate { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin: 20px 0; 
+        }
+        .q { 
+            border: 2px solid #dfe6e9; 
+            padding: 20px 10px; 
+            border-radius: 12px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+        }
+        .veg { background: #e6f4ea; border-color: #34a853; color: #1e7e34; }
+        .btn { 
+            width: 100%; 
+            padding: 18px; 
+            background: #00b894; 
+            color: white; 
+            border: none; 
+            border-radius: 15px; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:active { transform: scale(0.95); background: #00a383; }
+        .counter { 
+            font-size: 3rem; 
+            font-weight: bold; 
+            text-align: center; 
+            color: #00b894; 
+            margin: 10px 0; 
+        }
+        p { text-align: center; color: #636e72; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Rule of Quarters</h2>
+        <div class="plate">
+            <div class="q veg">Veggie 1</div>
+            <div class="q veg">Veggie 2</div>
+            <div class="q">Protein</div>
+            <div class="q">Carb</div>
+        </div>
+        <p>Fill 1/2 your plate with veggies to save calories automatically!</p>
+    </div>
+
+    <div class="card">
+        <h2>Calories Saved</h2>
+        <div class="counter" id="total">0</div>
+        <button class="btn" onclick="logMeal()">Log Perfect Meal</button>
+    </div>
+
+    <script>
+        let count = 0;
+        function logMeal() {
+            count += 250;
+            document.getElementById('total').innerText = count;
+            
+            // Visual feedback
+            const btn = document.querySelector('.btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Logged! +250";
+            btn.style.background = "#0984e3";
+            
+            setTimeout(() => { 
+                btn.innerText = originalText;
+                btn.style.background = "#00b894";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
