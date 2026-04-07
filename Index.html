@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MacroSnap: Local Save</title>
+    <style>
+        :root { --primary: #0984e3; --success: #00b894; --bg: #f4f7f6; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        .status-bar { width: 100%; max-width: 400px; display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .online-badge { color: var(--success); display: flex; align-items: center; font-size: 0.85rem; font-weight: 600; }
+        .dot { height: 8px; width: 8px; background: var(--success); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 5px var(--success); }
+        
+        .card { background: white; padding: 30px; border-radius: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); width: 100%; max-width: 400px; box-sizing: border-box; text-align: center; }
+        .goal { color: #636e72; font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .counter { font-size: 4rem; font-weight: 800; color: #2d3436; margin: 15px 0; font-variant-numeric: tabular-nums; }
+        
+        input { width: 100%; padding: 16px; border: 2px solid #edf2f7; border-radius: 16px; font-size: 1.1rem; text-align: center; outline: none; margin-bottom: 20px; box-sizing: border-box; transition: 0.2s; }
+        input:focus { border-color: var(--primary); background: #fbfdff; }
+        
+        .btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 18px; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+        .btn:active { transform: scale(0.96); opacity: 0.9; }
+        
+        .reset-link { margin-top: 25px; color: #b2bec3; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="status-bar">
+        <div class="online-badge"><span class="dot"></span> Local Sync Active</div>
+        <div style="font-size: 0.8rem; color: #636e72;">Target: 1,800</div>
+    </div>
+
+    <div class="card">
+        <div class="goal">Total Calories</div>
+        <div class="counter" id="totalDisplay">0</div>
+        
+        <input type="number" id="mealInput" placeholder="How many calories?" inputmode="numeric">
+        <button class="btn" onclick="addCalories()">Log Meal</button>
+        
+        <div class="reset-link" onclick="resetData()">Reset Daily Progress</div>
+    </div>
+
+    <script>
+        // Load data from phone memory on startup
+        let total = localStorage.getItem('snapTotal') ? parseInt(localStorage.getItem('snapTotal')) : 0;
+        document.getElementById('totalDisplay').innerText = total.toLocaleString();
+
+        function addCalories() {
+            const input = document.getElementById('mealInput');
+            const val = parseInt(input.value);
+            
+            if (val > 0) {
+                total += val;
+                // Save to phone memory
+                localStorage.setItem('snapTotal', total);
+                
+                // Update screen
+                document.getElementById('totalDisplay').innerText = total.toLocaleString();
+                input.value = '';
+                
+                // Haptic feedback feel
+                const btn = document.querySelector('.btn');
+                btn.innerText = "Added!";
+                btn.style.background = "#00b894";
+                setTimeout(() => {
+                    btn.innerText = "Log Meal";
+                    btn.style.background = "#0984e3";
+                }, 1000);
+            }
+        }
+
+        function resetData() {
+            if(confirm("Start a new day? This will clear your total.")) {
+                total = 0;
+                localStorage.setItem('snapTotal', 0);
+                document.getElementById('totalDisplay').innerText = "0";
+            }
+        }
+    </script>
+</body>
+</html>
